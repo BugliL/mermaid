@@ -70,6 +70,46 @@ const getNodeColors = (
   }
 };
 
+// Flame path for hotspot badge (12×12 viewBox)
+const FLAME_PATH =
+  'M6,12 C2,10 0,7 2,4 C3,6 4,6 4,5 C5,2 7,0 6,0 C8,1 11,4 10,7 C10,9 9,10 8,11 C8,9 7,8 6,9 Z';
+
+// Lightbulb path for opportunity badge (12×12 viewBox)
+const BULB_PATH =
+  'M4,0 C1,0 0,2 0,4 C0,6 1,7 3,8 L3,10 L5,10 L5,8 C7,7 8,6 8,4 C8,2 7,0 4,0 Z M3,11 L5,11 M3.5,12 L4.5,12';
+
+/**
+ * Render a small circular badge with an icon in the top-right corner of a sticky.
+ * cx/cy is the centre of the badge circle.
+ */
+const drawStickyBadge = (
+  parent: Selection<SVGGElement, unknown, HTMLElement, unknown>,
+  type: 'hotspot' | 'opportunity',
+  cx: number,
+  cy: number,
+  color: string
+) => {
+  const r = 10;
+  const iconPath = type === 'hotspot' ? FLAME_PATH : BULB_PATH;
+  const g = parent.append('g').attr('class', `es-node-badge es-node-badge-${type}`);
+
+  g.append('circle')
+    .attr('cx', cx)
+    .attr('cy', cy)
+    .attr('r', r)
+    .attr('fill', color)
+    .attr('stroke', 'none');
+
+  // Icon is drawn in a 12×12 viewBox; translate so it is centred in the badge
+  g.append('path')
+    .attr('d', iconPath)
+    .attr('fill', 'white')
+    .attr('stroke', 'none')
+    .attr('transform', `translate(${cx - 6},${cy - 6})`);
+};
+
+const isOverlay = (type: EsNode['type']) => type === 'hotspot' || type === 'opportunity';
+
 interface NodeBox {
   x: number;
   y: number;
@@ -131,7 +171,15 @@ const draw: DrawDefinition = (_text, id, _version, diagObj) => {
       (a, b) => a.positionInGroup - b.positionInGroup
     );
     const y = group.index * swimlaneHeight + padding;
-    const laneWidth = swimlaneLabelWidth + groupNodeList.length * (nodeWidth + nodeSep) + padding;
+
+    // Overlays (hotspot/opportunity) don't occupy their own column — they sit on top of
+    // the preceding element. Exclude them from lane width and column index calculation.
+    const nonOverlayNodes = groupNodeList.filter((n) => !isOverlay(n.type));
+    const laneWidth = swimlaneLabelWidth + nonOverlayNodes.length * (nodeWidth + nodeSep) + padding;
+
+    // Column index for a non-overlay node = how many non-overlay nodes precede it.
+    const columnOf = (node: EsNode) =>
+      nonOverlayNodes.filter((n) => n.positionInGroup < node.positionInGroup).length;
 
     // Swimlane background
     svg
@@ -159,8 +207,67 @@ const draw: DrawDefinition = (_text, id, _version, diagObj) => {
 
     // Render nodes in group
     for (const node of groupNodeList) {
-      const nodeX = swimlaneLabelWidth + node.positionInGroup * (nodeWidth + nodeSep);
       const nodeY = y + (swimlaneHeight - padding - nodeHeight) / 2;
+
+      // ── Overlay: hotspot / opportunity ──────────────────────────────────────
+      // Rendered as a sticky placed physically ON TOP of the nearest preceding
+      // non-overlay node, slightly offset and rotated to mimic a real workshop.
+      if (isOverlay(node.type)) {
+        const targetNode = nonOverlayNodes.findLast(
+          (n) => n.positionInGroup < node.positionInGroup
+        );
+        const targetBox = targetNode ? nodeBoxMap.get(targetNode.id) : null;
+        if (!targetBox) {
+          continue; // no element to attach to — skip
+        }
+
+        const overlayX = targetBox.x + 8;
+        const overlayY = targetBox.y - 40;
+        const cx = overlayX + nodeWidth / 2;
+        const cy = overlayY + nodeHeight / 2;
+        const colors = getNodeColors(node.type, t);
+
+        const g = svg
+          .append('g')
+          .attr('class', `es-node-overlay es-node-overlay-${node.type}`)
+          .attr('transform', `rotate(4,${cx},${cy})`);
+
+        g.append('rect')
+          .attr('class', `es-node es-node-${node.type}`)
+          .attr('x', overlayX)
+          .attr('y', overlayY)
+          .attr('width', nodeWidth)
+          .attr('height', nodeHeight)
+          .attr('rx', 4)
+          .attr('fill', colors.fill)
+          .attr('stroke', colors.stroke)
+          .attr('stroke-width', 1.5);
+
+        g.append('text')
+          .attr('class', 'es-node-label')
+          .attr('x', cx)
+          .attr('y', cy)
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'middle')
+          .attr('fill', t.textColor)
+          .attr('font-size', `${t.fontSizeNode}px`)
+          .text(node.label);
+
+        drawStickyBadge(g, node.type, overlayX + nodeWidth - 8, overlayY - 8, colors.stroke);
+
+        nodeBoxMap.set(node.id, {
+          x: overlayX,
+          y: overlayY,
+          width: nodeWidth,
+          height: nodeHeight,
+          centerX: cx,
+          centerY: cy,
+        });
+        continue;
+      }
+
+      // ── Regular node ────────────────────────────────────────────────────────
+      const nodeX = swimlaneLabelWidth + columnOf(node) * (nodeWidth + nodeSep);
 
       if (node.type === 'pivot') {
         // Render as vertical divider line

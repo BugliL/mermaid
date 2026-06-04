@@ -47,6 +47,12 @@ export const styles: DiagramStylesProvider = () => {
     font-size: ${t.fontSizeNode - 1}px;
     fill: ${t.textColor};
   }
+  .es-node-badge circle {
+    stroke: none;
+  }
+  .es-node-badge path {
+    fill: white;
+  }
   `;
 };
 
