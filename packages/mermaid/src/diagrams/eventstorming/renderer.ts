@@ -246,21 +246,24 @@ const resolveBox = (
   nodeSize: number
 ): NodeBox | null => {
   if (NODE_RENDERERS[node.type].isOverlay) {
+    const overlayNodeSize = nodeSize * 0.65;
     const nonOverlays = nodeList.filter((n) => !NODE_RENDERERS[n.type].isOverlay);
     const targetNode = nonOverlays.findLast((n) => n.positionInGroup < node.positionInGroup);
     const targetBox = targetNode ? nodeBoxMap.get(targetNode.id) : null;
+
     if (!targetBox) {
       return null; // nothing to attach to
     }
-    const x = targetBox.x + 8;
+    const x = targetBox.x + 40;
     const y = targetBox.y - 40;
+
     return {
       x,
       y,
-      width: nodeSize,
-      height: nodeSize,
-      centerX: x + nodeSize / 2,
-      centerY: y + nodeSize / 2,
+      width: overlayNodeSize,
+      height: overlayNodeSize,
+      centerX: x + overlayNodeSize / 2,
+      centerY: y + overlayNodeSize / 2,
     };
   }
 
@@ -289,7 +292,7 @@ const draw: DrawDefinition = (_text, id, _version, diagObj) => {
   const nodeSize = config.nodeWidth ?? 100; // square: width === height
   const swimlaneHeight = config.swimlaneHeight ?? 150;
   const swimlaneLabelWidth = 120;
-  const nodeSep = padding * 2;
+  const nodeSep = padding * 1.5;
 
   const svg: SvgGroup = select(`[id="${id}"]`);
 
