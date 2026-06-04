@@ -70,42 +70,50 @@ const getNodeColors = (
   }
 };
 
-// Flame path for hotspot badge (12×12 viewBox)
-const FLAME_PATH =
-  'M6,12 C2,10 0,7 2,4 C3,6 4,6 4,5 C5,2 7,0 6,0 C8,1 11,4 10,7 C10,9 9,10 8,11 C8,9 7,8 6,9 Z';
-
-// Lightbulb path for opportunity badge (12×12 viewBox)
-const BULB_PATH =
-  'M4,0 C1,0 0,2 0,4 C0,6 1,7 3,8 L3,10 L5,10 L5,8 C7,7 8,6 8,4 C8,2 7,0 4,0 Z M3,11 L5,11 M3.5,12 L4.5,12';
-
 /**
- * Render a small circular badge with an icon in the top-right corner of a sticky.
- * cx/cy is the centre of the badge circle.
+ * Draw a post-it style sticky note into `parent`.
+ * Includes: flat rect (no border), tape strip across the top, centred label.
  */
-const drawStickyBadge = (
+const drawPostIt = (
   parent: Selection<SVGGElement, unknown, HTMLElement, unknown>,
-  type: 'hotspot' | 'opportunity',
-  cx: number,
-  cy: number,
-  color: string
+  opts: {
+    type: EsNode['type'];
+    label: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    fill: string;
+    shadowFilterId: string;
+    fontSize: number;
+    textColor: string;
+  }
 ) => {
-  const r = 10;
-  const iconPath = type === 'hotspot' ? FLAME_PATH : BULB_PATH;
-  const g = parent.append('g').attr('class', `es-node-badge es-node-badge-${type}`);
+  const { x, y, width, height, fill, shadowFilterId, fontSize, textColor, type, label } = opts;
 
-  g.append('circle')
-    .attr('cx', cx)
-    .attr('cy', cy)
-    .attr('r', r)
-    .attr('fill', color)
-    .attr('stroke', 'none');
-
-  // Icon is drawn in a 12×12 viewBox; translate so it is centred in the badge
-  g.append('path')
-    .attr('d', iconPath)
-    .attr('fill', 'white')
+  // Main rect — no stroke, flat colour + shadow
+  parent
+    .append('rect')
+    .attr('class', `es-node es-node-${type}`)
+    .attr('x', x)
+    .attr('y', y)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', fill)
     .attr('stroke', 'none')
-    .attr('transform', `translate(${cx - 6},${cy - 6})`);
+    .attr('filter', `url(#${shadowFilterId})`);
+
+  // Label
+  parent
+    .append('text')
+    .attr('class', 'es-node-label')
+    .attr('x', x + width / 2)
+    .attr('y', y + height / 2)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .attr('fill', textColor)
+    .attr('font-size', `${fontSize}px`)
+    .text(label);
 };
 
 const isOverlay = (type: EsNode['type']) => type === 'hotspot' || type === 'opportunity';
@@ -130,15 +138,31 @@ const draw: DrawDefinition = (_text, id, _version, diagObj) => {
 
   const padding = config.padding ?? 8;
   const nodeWidth = config.nodeWidth ?? 100;
-  const nodeHeight = config.nodeHeight ?? 60;
-  const swimlaneHeight = config.swimlaneHeight ?? 100;
+  const nodeHeight = config.nodeHeight ?? nodeWidth;
+  const swimlaneHeight = config.swimlaneHeight ?? 150;
   const swimlaneLabelWidth = 120;
   const nodeSep = padding * 2;
 
   const svg: Selection<SVGGElement, unknown, HTMLElement, unknown> = select(`[id="${id}"]`);
 
   const arrowheadId = `es-arrowhead-${id}`;
+  const shadowFilterId = `es-shadow-${id}`;
   const defs = svg.append('defs');
+
+  // Drop shadow filter — mimics CSS box-shadow: 5px 5px 7px rgba(33,33,33,.7)
+  const filter = defs
+    .append('filter')
+    .attr('id', shadowFilterId)
+    .attr('x', '-25%')
+    .attr('y', '-25%')
+    .attr('width', '150%')
+    .attr('height', '150%');
+  filter
+    .append('feDropShadow')
+    .attr('dx', '5')
+    .attr('dy', '5')
+    .attr('stdDeviation', '3.5')
+    .attr('flood-color', 'rgba(33,33,33,0.65)');
 
   // Arrowhead marker for '->' edges
   defs
@@ -232,28 +256,18 @@ const draw: DrawDefinition = (_text, id, _version, diagObj) => {
           .attr('class', `es-node-overlay es-node-overlay-${node.type}`)
           .attr('transform', `rotate(4,${cx},${cy})`);
 
-        g.append('rect')
-          .attr('class', `es-node es-node-${node.type}`)
-          .attr('x', overlayX)
-          .attr('y', overlayY)
-          .attr('width', nodeWidth)
-          .attr('height', nodeHeight)
-          .attr('rx', 4)
-          .attr('fill', colors.fill)
-          .attr('stroke', colors.stroke)
-          .attr('stroke-width', 1.5);
-
-        g.append('text')
-          .attr('class', 'es-node-label')
-          .attr('x', cx)
-          .attr('y', cy)
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'middle')
-          .attr('fill', t.textColor)
-          .attr('font-size', `${t.fontSizeNode}px`)
-          .text(node.label);
-
-        drawStickyBadge(g, node.type, overlayX + nodeWidth - 8, overlayY - 8, colors.stroke);
+        drawPostIt(g, {
+          type: node.type,
+          label: node.label,
+          x: overlayX,
+          y: overlayY,
+          width: nodeWidth,
+          height: nodeHeight,
+          fill: colors.fill,
+          shadowFilterId,
+          fontSize: t.fontSizeNode,
+          textColor: t.textColor,
+        });
 
         nodeBoxMap.set(node.id, {
           x: overlayX,
@@ -305,30 +319,18 @@ const draw: DrawDefinition = (_text, id, _version, diagObj) => {
 
       const colors = getNodeColors(node.type, t);
 
-      // Sticky-note rectangle
-      svg
-        .append('rect')
-        .attr('class', `es-node es-node-${node.type}`)
-        .attr('x', nodeX)
-        .attr('y', nodeY)
-        .attr('width', nodeWidth)
-        .attr('height', nodeHeight)
-        .attr('rx', 4)
-        .attr('fill', colors.fill)
-        .attr('stroke', colors.stroke)
-        .attr('stroke-width', 1.5);
-
-      // Node label
-      svg
-        .append('text')
-        .attr('class', 'es-node-label')
-        .attr('x', nodeX + nodeWidth / 2)
-        .attr('y', nodeY + nodeHeight / 2)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .attr('fill', t.textColor)
-        .attr('font-size', `${t.fontSizeNode}px`)
-        .text(node.label);
+      drawPostIt(svg, {
+        type: node.type,
+        label: node.label,
+        x: nodeX,
+        y: nodeY,
+        width: nodeWidth,
+        height: nodeHeight,
+        fill: colors.fill,
+        shadowFilterId,
+        fontSize: t.fontSizeNode,
+        textColor: t.textColor,
+      });
 
       nodeBoxMap.set(node.id, {
         x: nodeX,

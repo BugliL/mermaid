@@ -29,7 +29,6 @@ export const styles: DiagramStylesProvider = () => {
     fill: ${t.textColor};
   }
   .es-node {
-    rx: 4;
   }
   .es-node-label {
     font-size: ${t.fontSizeNode}px;
@@ -46,12 +45,6 @@ export const styles: DiagramStylesProvider = () => {
   .es-edge-label {
     font-size: ${t.fontSizeNode - 1}px;
     fill: ${t.textColor};
-  }
-  .es-node-badge circle {
-    stroke: none;
-  }
-  .es-node-badge path {
-    fill: white;
   }
   `;
 };
