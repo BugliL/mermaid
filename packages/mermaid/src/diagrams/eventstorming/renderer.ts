@@ -70,6 +70,33 @@ interface NodeRenderer {
 
 // ── Primitive drawing helpers ─────────────────────────────────────────────────
 
+/**
+ * Split `text` into lines that fit within `maxWidth` pixels,
+ * using an average character-width estimate of 0.55 × fontSize.
+ */
+const wrapText = (text: string, maxWidth: number, fontSize: number): string[] => {
+  const charsPerLine = Math.max(1, Math.floor(maxWidth / (fontSize * 0.55)));
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let current = '';
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= charsPerLine) {
+      current = candidate;
+    } else {
+      if (current) {
+        lines.push(current);
+      }
+      current = word;
+    }
+  }
+  if (current) {
+    lines.push(current);
+  }
+  return lines;
+};
+
 const drawSquare = (
   parent: SvgGroup,
   node: EsNode,
@@ -94,17 +121,30 @@ const drawCentredLabel = (
   box: NodeBox,
   fontSize: number,
   color: string
-) =>
-  parent
+) => {
+  const innerPadding = 8;
+  const lineHeight = fontSize * 1.25;
+  const lines = wrapText(text, box.width - innerPadding * 2, fontSize);
+  const totalTextHeight = lines.length * lineHeight;
+  const startY = box.centerY - totalTextHeight / 2 + lineHeight / 2;
+
+  const textEl = parent
     .append('text')
     .attr('class', 'es-node-label')
     .attr('x', box.centerX)
-    .attr('y', box.centerY)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .attr('fill', color)
-    .attr('font-size', `${fontSize}px`)
-    .text(text);
+    .attr('font-size', `${fontSize}px`);
+
+  lines.forEach((line, i) => {
+    textEl
+      .append('tspan')
+      .attr('x', box.centerX)
+      .attr('y', startY + i * lineHeight)
+      .text(line);
+  });
+};
 
 // ── Concrete strategies ───────────────────────────────────────────────────────
 
