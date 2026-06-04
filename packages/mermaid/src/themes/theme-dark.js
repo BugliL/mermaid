@@ -278,6 +278,36 @@ class Theme {
       labelColor: this.cynefin?.labelColor || this.primaryTextColor,
     };
 
+    /* eventstorming */
+    this.eventstorming = {
+      eventFill: this.eventstorming?.eventFill || '#e65100',
+      eventStroke: this.eventstorming?.eventStroke || '#ff9800',
+      cmdFill: this.eventstorming?.cmdFill || '#0d47a1',
+      cmdStroke: this.eventstorming?.cmdStroke || '#2196f3',
+      actorFill: this.eventstorming?.actorFill || '#f9a825',
+      actorStroke: this.eventstorming?.actorStroke || '#fff176',
+      policyFill: this.eventstorming?.policyFill || '#7b1fa2',
+      policyStroke: this.eventstorming?.policyStroke || '#ce93d8',
+      readmodelFill: this.eventstorming?.readmodelFill || '#2e7d32',
+      readmodelStroke: this.eventstorming?.readmodelStroke || '#a5d6a7',
+      systemFill: this.eventstorming?.systemFill || '#880e4f',
+      systemStroke: this.eventstorming?.systemStroke || '#f48fb1',
+      aggregateFill: this.eventstorming?.aggregateFill || '#f57f17',
+      aggregateStroke: this.eventstorming?.aggregateStroke || '#ffd54f',
+      hotspotFill: this.eventstorming?.hotspotFill || '#b71c1c',
+      hotspotStroke: this.eventstorming?.hotspotStroke || '#ef5350',
+      opportunityFill: this.eventstorming?.opportunityFill || '#1b5e20',
+      opportunityStroke: this.eventstorming?.opportunityStroke || '#c8e6c9',
+      swimlaneBg: this.eventstorming?.swimlaneBg || 'rgb(30,30,30)',
+      swimlaneStroke: this.eventstorming?.swimlaneStroke || 'rgb(60,60,60)',
+      pivotStroke: this.eventstorming?.pivotStroke || '#cccccc',
+      edgeStroke: this.eventstorming?.edgeStroke || this.lineColor,
+      arrowhead: this.eventstorming?.arrowhead || this.lineColor,
+      fontSizeNode: this.eventstorming?.fontSizeNode || 12,
+      fontSizeLabel: this.eventstorming?.fontSizeLabel || 13,
+      textColor: this.eventstorming?.textColor || this.textColor,
+    };
+
     /* quadrant-graph */
     this.quadrant1Fill = this.quadrant1Fill || this.primaryColor;
     this.quadrant2Fill = this.quadrant2Fill || adjust(this.primaryColor, { r: 5, g: 5, b: 5 });

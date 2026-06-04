@@ -207,6 +207,13 @@ union A, B`,
     tf 02 evt End
     rf 03 readmodel ReadModel01 ->> 01 ->> 02 { a: true }
     rf 04 rmo ReadModel02 ->> 01 ->> 02`,
+
+  eventstorming: `eventstorming
+    group "Order Processing" {
+      event OrderPlaced
+      cmd PlaceOrder
+    }
+    PlaceOrder -> OrderPlaced`,
 };
 
 async function renderTwoAndCheckIds(

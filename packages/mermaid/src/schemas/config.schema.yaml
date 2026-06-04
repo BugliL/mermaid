@@ -339,6 +339,8 @@ properties:
     $ref: '#/$defs/WardleyDiagramConfig'
   cynefin:
     $ref: '#/$defs/CynefinDiagramConfig'
+  eventstorming:
+    $ref: '#/$defs/EventStormingDiagramConfig'
   railroad:
     $ref: '#/$defs/RailroadDiagramConfig'
   dompurifyConfig:
@@ -2861,3 +2863,35 @@ $defs: # JSON Schema definition (maybe we should move these to a separate file)
         description: The font weight to use.
         type: ['string', 'number']
         default: normal
+
+  EventStormingDiagramConfig:
+    title: EventStorming Diagram Config
+    allOf: [{ $ref: '#/$defs/BaseDiagramConfig' }]
+    description: Configuration for EventStorming diagrams.
+    type: object
+    unevaluatedProperties: false
+    properties:
+      padding:
+        description: Padding around each sticky-note element.
+        type: number
+        minimum: 0
+        default: 8
+      nodeWidth:
+        description: Default width of a sticky-note node.
+        type: number
+        minimum: 10
+        default: 100
+      nodeHeight:
+        description: Default height of a sticky-note node.
+        type: number
+        minimum: 10
+        default: 60
+      swimlaneHeight:
+        description: Height of each swimlane row.
+        type: number
+        minimum: 10
+        default: 100
+      useMaxWidth:
+        description: Whether to use maximum available width.
+        type: boolean
+        default: true

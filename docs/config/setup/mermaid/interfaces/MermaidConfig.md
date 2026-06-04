@@ -113,7 +113,7 @@ You can set this attribute to base the seed on a static string.
 
 > `optional` **dompurifyConfig**: `Config`
 
-Defined in: [packages/mermaid/src/config.type.ts:248](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L248)
+Defined in: [packages/mermaid/src/config.type.ts:249](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L249)
 
 ---
 
@@ -171,6 +171,14 @@ Defined in: [packages/mermaid/src/config.type.ts:241](https://github.com/mermaid
 
 ---
 
+### eventstorming?
+
+> `optional` **eventstorming**: `EventStormingDiagramConfig`
+
+Defined in: [packages/mermaid/src/config.type.ts:247](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L247)
+
+---
+
 ### flowchart?
 
 > `optional` **flowchart**: `FlowchartDiagramConfig`
@@ -195,7 +203,7 @@ See <https://developer.mozilla.org/en-US/docs/Web/CSS/font-family>
 
 > `optional` **fontSize**: `number`
 
-Defined in: [packages/mermaid/src/config.type.ts:250](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L250)
+Defined in: [packages/mermaid/src/config.type.ts:251](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L251)
 
 ---
 
@@ -321,7 +329,7 @@ Defines which main look to use for the diagram.
 
 > `optional` **markdownAutoWrap**: `boolean`
 
-Defined in: [packages/mermaid/src/config.type.ts:251](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L251)
+Defined in: [packages/mermaid/src/config.type.ts:252](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L252)
 
 ---
 
@@ -389,7 +397,7 @@ Defined in: [packages/mermaid/src/config.type.ts:243](https://github.com/mermaid
 
 > `optional` **railroad**: `RailroadDiagramConfig`
 
-Defined in: [packages/mermaid/src/config.type.ts:247](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L247)
+Defined in: [packages/mermaid/src/config.type.ts:248](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L248)
 
 ---
 
@@ -461,7 +469,7 @@ Defined in: [packages/mermaid/src/config.type.ts:226](https://github.com/mermaid
 
 > `optional` **suppressErrorRendering**: `boolean`
 
-Defined in: [packages/mermaid/src/config.type.ts:257](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L257)
+Defined in: [packages/mermaid/src/config.type.ts:258](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L258)
 
 Suppresses inserting 'Syntax error' diagram in the DOM.
 This is useful when you want to control how to handle syntax errors in your application.
@@ -539,7 +547,7 @@ Defined in: [packages/mermaid/src/config.type.ts:245](https://github.com/mermaid
 
 > `optional` **wrap**: `boolean`
 
-Defined in: [packages/mermaid/src/config.type.ts:249](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L249)
+Defined in: [packages/mermaid/src/config.type.ts:250](https://github.com/mermaid-js/mermaid/blob/master/packages/mermaid/src/config.type.ts#L250)
 
 ---
 

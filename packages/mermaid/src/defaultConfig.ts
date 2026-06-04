@@ -318,6 +318,9 @@ const config: RequiredDeep<MermaidConfig> = {
   cynefin: {
     ...defaultConfigJson.cynefin,
   },
+  eventstorming: {
+    ...defaultConfigJson.eventstorming,
+  },
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

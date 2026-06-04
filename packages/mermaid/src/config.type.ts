@@ -244,6 +244,7 @@ export interface MermaidConfig {
   venn?: VennDiagramConfig;
   'wardley-beta'?: WardleyDiagramConfig;
   cynefin?: CynefinDiagramConfig;
+  eventstorming?: EventStormingDiagramConfig;
   railroad?: RailroadDiagramConfig;
   dompurifyConfig?: DOMPurifyConfiguration;
   wrap?: boolean;
@@ -1948,6 +1949,34 @@ export interface CynefinDiagramConfig extends BaseDiagramConfig {
    *
    */
   seed?: number;
+}
+/**
+ * Configuration for EventStorming diagrams.
+ *
+ * This interface was referenced by `MermaidConfig`'s JSON-Schema
+ * via the `definition` "EventStormingDiagramConfig".
+ */
+export interface EventStormingDiagramConfig extends BaseDiagramConfig {
+  /**
+   * Padding around each sticky-note element.
+   */
+  padding?: number;
+  /**
+   * Default width of a sticky-note node.
+   */
+  nodeWidth?: number;
+  /**
+   * Default height of a sticky-note node.
+   */
+  nodeHeight?: number;
+  /**
+   * Height of each swimlane row.
+   */
+  swimlaneHeight?: number;
+  /**
+   * Whether to use maximum available width.
+   */
+  useMaxWidth?: boolean;
 }
 /**
  * Configuration for Railroad (Syntax) Diagrams

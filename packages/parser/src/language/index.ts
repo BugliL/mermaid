@@ -97,6 +97,22 @@ export {
   EmModelEntityType,
   isEmModelEntityType,
   isEmResetFrame,
+  EventStorming,
+  EsElement,
+  EsFlow,
+  EsFlowOp,
+  EsGroup,
+  EsLink,
+  EsNamedElement,
+  EsNodeType,
+  EsPivot,
+  isEventStorming,
+  isEsElement,
+  isEsFlow,
+  isEsGroup,
+  isEsLink,
+  isEsNamedElement,
+  isEsPivot,
 } from './generated/ast.js';
 
 export {
@@ -116,6 +132,7 @@ export {
   TreeViewGrammarGeneratedModule as TreeViewGeneratedModule,
   WardleyGrammarGeneratedModule as WardleyGeneratedModule,
   CynefinGrammarGeneratedModule as CynefinGeneratedModule,
+  EventStormingDiagramGeneratedModule as EventStormingGeneratedModule,
 } from './generated/module.js';
 
 export * from './gitGraph/index.js';
@@ -134,3 +151,4 @@ export * from './railroad-peg/index.js';
 export * from './treemap/index.js';
 export * from './wardley/index.js';
 export * from './cynefin/index.js';
+export * from './eventstorming/index.js';

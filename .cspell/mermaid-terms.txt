@@ -15,6 +15,7 @@ doublecircle
 elem
 elems
 eventmodeling
+eventstorming
 gantt
 gitgraph
 gzipped

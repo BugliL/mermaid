@@ -271,6 +271,36 @@ class Theme {
       labelColor: this.cynefin?.labelColor || this.primaryTextColor,
     };
 
+    /* eventstorming */
+    this.eventstorming = {
+      eventFill: this.eventstorming?.eventFill || '#ff9800',
+      eventStroke: this.eventstorming?.eventStroke || '#e65100',
+      cmdFill: this.eventstorming?.cmdFill || '#2196f3',
+      cmdStroke: this.eventstorming?.cmdStroke || '#0d47a1',
+      actorFill: this.eventstorming?.actorFill || '#fff176',
+      actorStroke: this.eventstorming?.actorStroke || '#f9a825',
+      policyFill: this.eventstorming?.policyFill || '#ce93d8',
+      policyStroke: this.eventstorming?.policyStroke || '#7b1fa2',
+      readmodelFill: this.eventstorming?.readmodelFill || '#a5d6a7',
+      readmodelStroke: this.eventstorming?.readmodelStroke || '#2e7d32',
+      systemFill: this.eventstorming?.systemFill || '#f48fb1',
+      systemStroke: this.eventstorming?.systemStroke || '#880e4f',
+      aggregateFill: this.eventstorming?.aggregateFill || '#ffd54f',
+      aggregateStroke: this.eventstorming?.aggregateStroke || '#f57f17',
+      hotspotFill: this.eventstorming?.hotspotFill || '#ef5350',
+      hotspotStroke: this.eventstorming?.hotspotStroke || '#b71c1c',
+      opportunityFill: this.eventstorming?.opportunityFill || '#c8e6c9',
+      opportunityStroke: this.eventstorming?.opportunityStroke || '#1b5e20',
+      swimlaneBg: this.eventstorming?.swimlaneBg || 'rgb(250,250,250)',
+      swimlaneStroke: this.eventstorming?.swimlaneStroke || 'rgb(220,220,220)',
+      pivotStroke: this.eventstorming?.pivotStroke || '#333333',
+      edgeStroke: this.eventstorming?.edgeStroke || this.lineColor,
+      arrowhead: this.eventstorming?.arrowhead || this.lineColor,
+      fontSizeNode: this.eventstorming?.fontSizeNode || 12,
+      fontSizeLabel: this.eventstorming?.fontSizeLabel || 13,
+      textColor: this.eventstorming?.textColor || this.textColor,
+    };
+
     /* radar */
     this.radar = {
       axisColor: this.radar?.axisColor || this.lineColor,
