@@ -50,4 +50,4 @@ export const styles: DiagramStylesProvider = () => {
   `;
 };
 
-export default { getStyles: styles };
+export default styles;

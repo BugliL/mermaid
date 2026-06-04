@@ -100,7 +100,7 @@ eventstorming
   group "Customer Actions" {
     actor Customer
     readmodel OrderCatalog "Browsable products"
-    hotspot "How does stock affect availability?"
+    hotspot StockQuestion "How does stock affect availability?"
   }
 
   group "Order Processing" {
@@ -116,7 +116,7 @@ eventstorming
     cmd ChargeCard
     agg Payment
     event PaymentProcessed
-    opportunity "Instant settlement"
+    opportunity InstantSettlement "Instant settlement"
   }
 
   Customer -> PlaceOrder -> Order -> OrderPlaced -> AutoApprove -> ChargeCard -> Payment -> PaymentProcessed
